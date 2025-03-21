@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="card-body d-flex">
-                        <div class="">
+                        <div style="max-width: 300px">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">{{ $product->description }}.</p>
                             <p class="card-text">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
@@ -21,7 +21,7 @@
                             price: {{ $product->price }},
                             get totalPrice() { return this.quantity * this.price; }
                         }">
-                            <form action="{{ route('order.process') }}" method="POST">
+                            <form action="{{ route('order.process', $product->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
 

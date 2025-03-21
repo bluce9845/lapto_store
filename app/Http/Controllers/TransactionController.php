@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
-    public function transactionProcess(Request $request)
+    public function transactionProcess(Request $request, $product_id)
     {
         // Validasi input
         $request->validate([
@@ -72,6 +73,9 @@ class TransactionController extends Controller
             $snapToken = \Midtrans\Snap::getSnapToken($params);
             $transaction->snap_token = $snapToken;
             $transaction->save();
+
+            $product = Product::findOrFail($product_id);
+            $product->decrement('stock', $transaction['quantity']);
 
             return view('paymentConfirm', compact('transaction'));
         } catch (\Exception $e) {
